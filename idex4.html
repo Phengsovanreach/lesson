@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eRic_Morgan Losson</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Base styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .container {
+            max-width: 1000px;
+        }
+        .lesson-card {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .lesson-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+        }
+        .code-block {
+            background-color: #2d3748; /* Darker slate for code */
+            color: #f7fafc;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.875rem;
+            margin-top: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+        .live-preview {
+            border: 2px dashed #9ca3af;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            min-height: 50px;
+            margin-top: 0.75rem;
+            background-color: #ffffff;
+            color: #1f2937;
+        }
+        .lesson-header {
+            border-left: 5px solid #ef4444; /* Red stripe */
+        }
+        
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background-color: #1f2937;
+            color: #f3f4f6;
+        }
+        .dark-mode .lesson-card {
+            background-color: #374151;
+            color: #f3f4f6;
+        }
+        .dark-mode .code-block {
+            background-color: #111827;
+        }
+        .dark-mode .live-preview {
+            background-color: #4b5563;
+            border-color: #d1d5db;
+            color: #f3f4f6;
+        }
+        .dark-mode header, .dark-mode footer {
+            background-color: #b91c1c; /* Darker red */
+        }
+
+        /* Responsive Challenge Hint Styling */
+        .challenge-hint {
+            display: none;
+            background-color: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 0.75rem;
+            border-radius: 0.25rem;
+            color: #92400e;
+        }
+        .dark-mode .challenge-hint {
+            background-color: #4c3e0e;
+            border-left-color: #fcd34d;
+            color: #fcd34d;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="container mx-auto p-4 sm:p-8">
+        <!-- HEADER -->
+        <header class="text-center py-6 bg-red-700 text-white rounded-lg lesson-card mb-8 sticky top-0 z-10">
+            <h1 class="text-3xl sm:text-4xl font-extrabold mb-2">វគ្គសិក្សាអភិវឌ្ឍន៍គេហទំព័រអន្តរកម្ម</h1>
+            <p class="text-lg opacity-90">HTML, CSS, និង JavaScript សម្រាប់អ្នកចាប់ផ្តើមដំបូង (ជាភាសាខ្មែរ)</p>
+            <button id="mode-toggle" class="mt-3 px-4 py-2 bg-white text-red-700 font-bold rounded-full text-sm shadow-lg hover:bg-gray-100 transition duration-150">ប្តូររបៀប (Light/Dark)</button>
+        </header>
+
+        <!-- TABLE OF CONTENTS (TOC) -->
+        <nav class="bg-white dark-mode:bg-gray-700 p-6 rounded-xl lesson-card mb-8">
+            <h2 class="text-2xl font-bold text-red-600 mb-4">តារាងមាតិកា (Table of Contents)</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm font-medium">
+                <!-- HTML Links -->
+                <div class="space-y-1">
+                    <h3 class="font-extrabold text-blue-700 border-b pb-1 mb-2">HTML (រចនាសម្ព័ន្ធ)</h3>
+                    <a href="#lesson1" class="block hover:text-red-500">១. រចនាសម្ព័ន្ធមូលដ្ឋាន</a>
+                    <a href="#lesson2" class="block hover:text-red-500">២. ចំណងជើង & កថាខណ្ឌ</a>
+                    <a href="#lesson3" class="block hover:text-red-500">៣. តំណភ្ជាប់ & រូបភាព</a>
+                    <a href="#lesson4" class="block hover:text-red-500">៤. បញ្ជី</a>
+                    <a href="#lesson5" class="block hover:text-red-500">៥. តារាងទិន្នន័យ</a>
+                    <a href="#lesson6" class="block hover:text-red-500">៦. ទម្រង់ និងធាតុបញ្ចូល</a>
+                    <a href="#lesson7" class="block hover:text-red-500">៧. ធាតុបញ្ចូលកម្រិតខ្ពស់</a>
+                    <a href="#lesson8" class="block hover:text-red-500">៨. Semantic (Header, Main, Footer)</a>
+                    <a href="#lesson9" class="block hover:text-red-500">៩. Semantic (Section, Article, Aside)</a>
+                    <a href="#lesson10" class="block hover:text-red-500">១០. ពហុព័ត៌មាន</a>
+                    <a href="#lesson11" class="block hover:text-red-500">១១. Meta Tags & Data-*</a>
+                </div>
+                <!-- CSS Links -->
+                <div class="space-y-1">
+                    <h3 class="font-extrabold text-blue-700 border-b pb-1 mb-2">CSS (រចនាប័ទ្ម)</h3>
+                    <a href="#lesson12" class="block hover:text-red-500">១២. វិធីសាស្រ្ត CSS</a>
+                    <a href="#lesson13" class="block hover:text-red-500">១៣. ពណ៌ និងពុម្ពអក្សរ</a>
+                    <a href="#lesson14" class="block hover:text-red-500">១៤. ឧបករណ៍ជ្រើសរើស CSS</a>
+                    <a href="#lesson15" class="block hover:text-red-500">១៥. Box Model</a>
+                    <a href="#lesson16" class="block hover:text-red-500">១៦. Display Property</a>
+                    <a href="#lesson17" class="block hover:text-red-500">១៧. Flexbox Basics</a>
+                    <a href="#lesson18" class="block hover:text-red-500">១៨. Flexbox Alignment</a>
+                    <a href="#lesson19" class="block hover:text-red-500">១៩. CSS Grid Intro</a>
+                    <a href="#lesson20" class="block hover:text-red-500">២០. Responsive Design</a>
+                    <a href="#lesson21" class="block hover:text-red-500">២១. Transitions & Animations</a>
+                    <a href="#lesson22" class="block hover:text-red-500">២២. Pseudo-classes</a>
+                </div>
+                <!-- JavaScript Links -->
+                <div class="space-y-1">
+                    <h3 class="font-extrabold text-blue-700 border-b pb-1 mb-2">JavaScript (អន្តរកម្ម)</h3>
+                    <a href="#lesson23" class="block hover:text-red-500">២៣. ការបញ្ចូល JS</a>
+                    <a href="#lesson24" class="block hover:text-red-500">២៤. អថេរ & ប្រភេទទិន្នន័យ</a>
+                    <a href="#lesson25" class="block hover:text-red-500">២៥. លក្ខខណ្ឌ & ប្រតិបត្តិករ</a>
+                    <a href="#lesson26" class="block hover:text-red-500">២៦. អនុគមន៍ (Functions)</a>
+                    <a href="#lesson27" class="block hover:text-red-500">២៧. ព្រឹត្តិការណ៍ (Events)</a>
+                    <a href="#lesson28" class="block hover:text-red-500">២៨. DOM Selection</a>
+                    <a href="#lesson29" class="block hover:text-red-500">២៩. DOM Manipulation</a>
+                    <a href="#lesson30" class="block hover:text-red-500">៣០. DOM Creating</a>
+                    <a href="#lesson31" class="block hover:text-red-500">៣១. Local Storage</a>
+                    <a href="#lesson32" class="block hover:text-red-500">៣២. គម្រោង៖ ឧបករណ៍រាប់លេខ</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- COURSE CONTENT -->
+        <main id="course-content" class="space-y-8">
+            <!-- HTML Section Header -->
+            <h2 class="text-3xl font-extrabold text-red-600 border-b-4 border-red-600 pb-2 pt-4">ផ្នែកទី ១៖ HTML (HyperText Markup Language)</h2>
+            <p class="text-lg mb-6">HTML គឺ​ជា​គ្រឹះ​នៃ​គេហទំព័រ​ទាំង​អស់។ វា​ផ្តល់​នូវ​រចនាសម្ព័ន្ធ (Structure) សម្រាប់​មាតិកា​របស់​អ្នក។</p>
+
+            <!-- Lesson 1: Basic Structure & DOCTYPE -->
+            <section id="lesson1" class="bg-white p-6 rounded-xl lesson-card lesson-header">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">១. រចនាសម្ព័ន្ធមូលដ្ឋាន និង &lt;!DOCTYPE html&gt;</h3>
+                <p class="text-gray-700 mb-4">ទំព័រ HTML ទាំងអស់ត្រូវតែមានរចនាសម្ព័ន្ធមូលដ្ឋាននេះ។ ការប្រកាស **&lt;!DOCTYPE html&gt;** ត្រូវតែជាបន្ទាត់ដំបូងបង្អស់ ហើយប្រាប់ Browser ថាឯកសារនេះជា HTML5 ។</p>
+                <div class="code-block">
+                    &lt;!DOCTYPE html&gt;<br>
+                    &lt;html lang="km"&gt;<br>
+                    &lt;head&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;meta charset="UTF-8"&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;ទំព័រទីមួយរបស់ខ្ញុំ&lt;/title&gt;<br>
+                    &lt;/head&gt;<br>
+                    &lt;body&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;!-- មាតិកាដែលអាចមើលឃើញនៅទីនេះ --&gt;<br>
+                    &lt;/body&gt;<br>
+                    &lt;/html&gt;
+                </div>
+                <h4 class="font-semibold mt-4">ការមើលជាមុនផ្ទាល់៖</h4>
+                <div class="live-preview">
+                    <!-- Preview content is mainly structural and reflected in the page title -->
+                    <p>ទំព័រ HTML ត្រូវបានចាប់ផ្ដើម។ ចំណងជើងទំព័រ (Title) ត្រូវបានកំណត់ទៅជា "ទំព័រទីមួយរបស់ខ្ញុំ"។</p>
+                </div>
+            </section>
+
+            <!-- Lesson 2: Headings and Paragraphs -->
+            <section id="lesson2" class="bg-white p-6 rounded-xl lesson-card lesson-header">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">២. ចំណងជើង (&lt;h1&gt; to &lt;h6&gt;) និង កថាខណ្ឌ (&lt;p&gt;)</h3>
+                <p class="text-gray-700 mb-4">**ចំណងជើង** ប្រើស្លាក `h1` ដល់ `h6` ដើម្បីបង្ហាញឋានានុក្រមនៃមាតិកា។ **h1** គឺសំខាន់បំផុត។ **កថាខណ្ឌ** ប្រើស្លាក `p` ។</p>
+                <div class="code-block">
+                    &lt;h1&gt;នេះជាចំណងជើងសំខាន់បំផុត&lt;/h1&gt;<br>
+                    &lt;h3&gt;ចំណងជើងរងកម្រិតទី ៣&lt;/h3&gt;<br>
+                    &lt;p&gt;នេះ​គឺ​ជា​កថាខណ្ឌ​នៃ​អត្ថបទ​ដែល​មាន​ព័ត៌មាន​ពេញលេញ។&lt;/p&gt;
+                </div>
+                <h4 class="font-semibold mt-4">ការមើលជាមុនផ្ទាល់៖</h4>
+                <div class="live-preview">
+                    <h1>នេះជាចំណងជើងសំខាន់បំផុត</h1>
+                    <h3>ចំណងជើងរងកម្រិតទី ៣</h3>
+                    <p>នេះ​គឺ​ជា​កថាខណ្ឌ​នៃ​អត្ថបទ​ដែល​មាន​ព័ត៌មាន​ពេញលេញ។</p>
+                </div>
+            </section>
+
+            <!-- Lesson 3: Links and Images -->
+            <section id="lesson3" class="bg-white p-6 rounded-xl lesson-card lesson-header">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">៣. តំណភ្ជាប់ (&lt;a&gt;) និង រូបភាព (&lt;img&gt;)</h3>
+                <p class="text-gray-700 mb-4">ស្លាក **&lt;a&gt;** ប្រើគុណលក្ខណៈ **`href`** ដើម្បីបង្កើតតំណខ្ពស់។ ស្លាក **&lt;img&gt;** ប្រើ **`src`** សម្រាប់ប្រភពរូបភាព និង **`alt`** សម្រាប់អត្ថបទជំនួស (សំខាន់សម្រាប់ SEO) ។</p>
+                <div class="code-block">
+                    &lt;a href="https://www.google.com" target="_blank"&gt;ចូលទៅ Google&lt;/a&gt;<br>
+                    &lt;img src="https://placehold.co/100x50/10b981/ffffff?text=LOGO" alt="រូបភាពនិមិត្តសញ្ញា"&gt;
+                </div>
+                <h4 class="font-semibold mt-4">ការមើលជាមុនផ្ទាល់៖</h4>
+                <div class="live-preview flex items-center space-x-4">
+                    <a href="https://www.google.com" target="_blank" class="text-blue-600 hover:underline">ចូលទៅ Google</a>
+                    <img src="https://placehold.co/100x50/10b981/ffffff?text=LOGO" alt="រូបភាពនិមិត្តសញ្ញា">
+                </div>
+            </section>
+            
+            <!-- Lesson 4: Lists -->
+            <section id="lesson4" class="bg-white p-6 rounded-xl lesson-card lesson-header">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">៤. បញ្ជី (&lt;ul&gt; &lt;ol&gt;)</h3>
+                <p class="text-gray-700 mb-4">**&lt;ul&gt;** សម្រាប់បញ្ជីដែលគ្មានលំដាប់ (ចំណុចមូល)។ **&lt;ol&gt;** សម្រាប់បញ្ជីដែលមានលំដាប់ (លេខ) ។ ធាតុនីមួយៗប្រើ **&lt;li&gt;** ។</p>
+                <div class="code-block">
+                    &lt;ul&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;អង្ករ&lt;/li&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;ត្រី&lt;/li&gt;<br>
+                    &lt;/ul&gt;<br>
+                    &lt;ol&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;ជំហានទី ១&lt;/li&gt;<br>
+                    &lt;/ol&gt;
+                </div>
+                <h4 class="font-semibold mt-4">ការមើលជាមុនផ្ទាល់៖</h4>
+                <div class="live-preview flex space-x-8">
+                    <div><h5 class="font-bold">គ្មានលំដាប់:</h5><ul class="list-disc list-inside"><li>អង្ករ</li><li>ត្រី</li></ul></div>
+                    <div><h5 class="font-bold">មានលំដាប់:</h5><ol class="list-decimal list-inside"><li>ជំហានទី ១</li><li>ជំហានទី ២</li></ol></div>
+                </div>
+            </section>
+
+            <!-- Lesson 5: Tables -->
+            <section id="lesson5" class="bg-white p-6 rounded-xl lesson-card lesson-header">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">៥. តារាងទិន្នន័យ (&lt;table&gt;)</h3>
+                <p class="text-gray-700 mb-4">តារាងប្រើ `table`, `tr` (ជួរដេក), `th` (ក្បាលជួរឈរ), និង `td` (ក្រឡាទិន្នន័យ) ។</p>
+                <div class="code-block">
+                    &lt;table&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;tr&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;th&gt;ឈ្មោះ&lt;/th&gt;&lt;td&gt;ពិសិដ្ឋ&lt;/td&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;/tr&gt;<br>
+                    &lt;/table&gt;
+                </div>
+                <h4 class="font-semibold mt-4">ការមើលជាមុនផ្ទាល់៖</h4>
+                <div class="live-preview">
+                    <table class="w-2/3 border-collapse">
+                        <thead><tr class="bg-gray-100"><th class="p-2 border text-left">លក្ខណៈ</th><th class="p-2 border text-left">តម្លៃ</th></tr></thead>
+                        <tbody><tr class="hover:bg-gray-50"><td class="p-2 border">ឈ្មោះ</td><td class="p-2 border">ពិសិដ្ឋ</td></tr></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Lesson 6: Basic Forms and Inputs -->
+            <section id="lesson6" class="bg-white p-6 rounded-xl lesson-card lesson-header">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">៦. ទម្រង់ (&lt;form&gt;) និង ធាតុបញ្ចូលមូលដ្ឋាន</h3>
+                <p class="text-gray-700 mb-4">ស្លាក **&lt;form&gt;** ផ្ទុកធាតុបញ្ចូល។ **&lt;label&gt;** ផ្តល់ស្លាកឈ្មោះ។ **&lt;input&gt;** ប្រើ `type="text"` សម្រាប់អត្ថបទធម្មតា និង `type="email"` សម្រាប់អ៊ីមែល។</p>
+                <div class="code-block">
+                    &lt;form&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;label for="name"&gt;ឈ្មោះ៖&lt;/label&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;input type="text" id="name" required&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;button type="submit"&gt;បញ្ជូន&lt;/button&gt;<br>
+                    &lt;/form&gt;
+                </div>
+                <h4 class="font-semibold mt-4">ការមើលជាមុនផ្ទាល់៖</h4>
+                <div class="live-preview">
+                    <form class="space-y-3">
+                        <label for="live_name" class="block font-medium">ឈ្មោះ៖</label>
+                        <input type="text" id="live_name" class="border p-2 rounded w-full" placeholder="បញ្ចូលឈ្មោះ...">
+                        <button type="submit" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">បញ្ជូន</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Lesson 7: Advanced Form Inputs -->
+            <section id="lesson7" class="bg-white p-6 rounded-xl lesson-card lesson-header">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">៧. ធាតុបញ្ចូលកម្រិតខ្ពស់ (&lt;radio&gt;, &lt;checkbox&gt;, &lt;select&gt;)</h3>
+                <p class="text-gray-700 mb-4">ប្រើ `type="radio"` សម្រាប់ជ្រើសរើសជម្រើសតែមួយ និង `type="checkbox"` សម្រាប់ជ្រើសរើសច្រើន។ `&lt;select&gt;` ប្រើ `&lt;option&gt;` សម្រាប់បញ្ជីទម្លាក់ចុះ។</p>
+                <div class="code-block">
+                    &lt;input type="radio" name="g" value="male"&gt;ប្រុស<br>
+                    &lt;input type="checkbox" checked&gt;ទទួលព្រម<br>
+                    &lt;select&gt;&lt;option&gt;ខ្មែរ&lt;/option&gt;&lt;/select&gt;
+                </div>
+                <h4 class="font-semibold mt-4">ការមើលជាមុនផ្ទាល់៖</h4>
+                <div class="live-preview space-y-2">
+                    <div>
+                        <input type="radio" id="gender_m" name="live_gender" value="male"><label for="gender_m" class="ml-1">ប្រុស</label>
+                        <input type="radio" id="gender_f" name="live_gender" value="female" class="ml-4"><label for="gender_f" class="ml-1">ស្រី</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="live_terms" checked><label for="live_terms" class="ml-1">ខ្ញុំយល់ព្រមតាមលក្ខខណ្ឌ</label>
+                    </div>
+                    <select class="border p-2 rounded">
+                        <option>ខ្មែរ</option>
+                        <option>អង់គ្លេស</option>
+                    </select>
+                </div>
+            </section>
+
+            <!-- Lesson 8: Semantic HTML (Header, Main, Footer) -->
+            <section id="lesson8" class="bg-white p-6 rounded-xl lesson-card lesson-header">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">៨. Semantic HTML (Header, Main, Footer)</h3>
+                <p class="text-gray-700 mb-4">ស្លាក Semantic ផ្តល់អត្ថន័យដល់រចនាសម្ព័ន្ធទំព័រ (មិនមែនគ្រាន់តែរចនាប័ទ្មទេ)។ **&lt;header&gt;** សម្រាប់ឡូហ្គោ, **&lt;main&gt;** សម្រាប់មាតិកាសំខាន់, **&lt;footer&gt;** សម្រាប់ព័ត៌មានរក្សាសិទ្ធិ។</p>
+                <div class="code-block">
+                    &lt;header&gt;ឡូហ្គោគេហទំព័រ&lt;/header&gt;<br>
+                    &lt;main&gt;មាតិកាសំខាន់នៅទីនេះ&lt;/main&gt;<br>
+                    &lt;footer&gt;រក្សាសិទ្ធិ © ២០២៤&lt;/footer&gt;
+                </div>
+                <h4 class="font-semibold mt-4">ការមើលជាមុនផ្ទាល់៖</h4>
+                <div class="live-preview space-y-2 text-sm">
+                    <header class="bg-red-100 p-2 font-bold rounded">Header: ឡូហ្គោ</header>
+                    <main class="border-2 border-dashed border-gray-400 p-2 rounded">Main: មាតិកាសំខាន់</main>
+                    <footer class="bg-gray-200 p-2 text-center rounded text-xs">Footer: រក្សាសិទ្ធិ</footer>
+                </div>
+            </section>
+
+            <!-- Lesson 9: Semantic HTML (Section, Article, Aside) -->
+            <section id="lesson9" class="bg-white p-6 rounded-xl lesson-card lesson-header">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">៩. Semantic HTML (Section, Article, Aside)</h3>
+                <p class="text-gray-700 mb-4">**&lt;section&gt;** សម្រាប់ដាក់ជាក្រុមមាតិកាដែលពាក់ព័ន្ធ។ **&lt;article&gt;** សម្រាប់មាតិកាឯករាជ្យ (ដូចជាអត្ថបទប្លុក)។ **&lt;aside&gt;** សម្រាប់ព័ត៌មានរឹម (Sidebar) ។</p>
+                <div class="code-block">
+                    &lt;section&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;article&gt;អត្ថបទពេញលេញ&lt;/article&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;aside&gt;ពាណិជ្ជកម្ម&lt;/aside&gt;<br>
+                    &lt;/section&gt;
+                </div>
+                <h4 class="font-semibold mt-4">ការមើលជាមុនផ្ទាល់៖</h4>
+                <div class="live-preview flex space-x-3">
+                    <section class="w-2/3 p-2 bg-green-100 rounded">
+                        <h5 class="font-bold">SECTION:</h5>
+                        <article class="p-1 bg-white border border-gray-300 rounded text-sm">ARTICLE: រឿងរ៉ាវ</article>
+                    </section>
+                    <aside class="w-1/3 p-2 bg-yellow-100 rounded text-sm">ASIDE: ព័ត៌មានបន្ថែម</aside>
+                </div>
+            </section>
+            
+            <!-- Lesson 10: Multimedia -->
+            <section id="lesson10" class="bg-white p-6 rounded-xl lesson-card lesson-header">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">១០. ធាតុពហុព័ត៌មាន (&lt;audio&gt; និង &lt;video&gt;)</h3>
+                <p class="text-gray-700 mb-4">ស្លាក `&lt;audio&gt;` និង `&lt;video&gt;` អនុញ្ញាតឱ្យអ្នកបង្កប់មេឌៀ។ គុណលក្ខណៈ **`controls`** ផ្តល់នូវរបារចាក់ (play/pause) សម្រាប់អ្នកប្រើប្រាស់។</p>
+                <div class="code-block">
+                    &lt;audio controls&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;source src="song.mp3" type="audio/mpeg"&gt;<br>
+                    &lt;/audio&gt;<br>
+                    &lt;video width="200" controls&gt;...&lt;/video&gt;
+                </div>
+                <h4 class="font-semibold mt-4">ការមើលជាមុនផ្ទាល់៖</h4>
+                <div class="live-preview space-y-2">
+                    <p class="text-sm">អ្នកនឹងឃើញការបញ្ជា (controls) សម្រាប់ចាក់មេឌៀដែលគ្មានប្រភព។</p>
+                    <audio controls class="w-full max-w-sm"><p>Audio Player</p></audio>
+                </div>
+            </section>
+            
+            <!-- Lesson 11: Meta Tags & Data Attributes -->
+            <section id="lesson11" class="bg-white p-6 rounded-xl lesson-card lesson-header">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">១១. Meta Tags និង Data Attributes (data-*)</h3>
+                <p class="text-gray-700 mb-4">**Meta tags** ដូចជា `viewport` (សម្រាប់ Responsive) គឺស្ថិតនៅក្នុង `&lt;head&gt;`។ **Data attributes** (`data-*`) អនុញ្ញាតឱ្យអ្នករក្សាទុកទិន្នន័យផ្ទាល់ខ្លួននៅលើធាតុ HTML ដែល JS អាចចូលប្រើបាន។</p>
+                <div class="code-block">
+                    &lt;!-- សម្រាប់ Mobile Responsive --&gt;<br>
+                    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;<br>
+                    <br>
+                    &lt;!-- Data Attribute --&gt;<br>
+                    &lt;div id="product" <span class="text-yellow-300">data-price="19.99"</span>&gt;Item 1&lt;/div&gt;
+                </div>
+                <h4 class="font-semibold mt-4">ការមើលជាមុនផ្ទាល់៖</h4>
+                <div class="live-preview">
+                    <p class="font-mono text-sm" id="data_attr_check" data-id="KHM001">ពិនិត្យមើលធាតុនេះសម្រាប់ data-id</p>
+                    <button onclick="alert('ID: ' + document.getElementById('data_attr_check').dataset.id)" class="bg-purple-500 text-white p-2 rounded text-sm hover:bg-purple-600">បង្ហាញ ID ធាតុ</button>
+                    <script>
+                        // NOTE: Using native alert() here for simplicity, but avoid in production UI.
+                        function alert(message) {
+                            document.getElementById('data_attr_check').innerHTML = `<span class="font-bold">សារៈសំខាន់៖</span> ${message}`;
+                        }
+                    </script>
+                </div>
+            </section>
+
+            <!-- CSS Section Header -->
+            <h2 class="text-3xl font-extrabold text-red-600 border-b-4 border-red-600 pb-2 pt-4">ផ្នែកទី ២៖ CSS (Cascading Style Sheets)</h2>
+            <p class="text-lg mb-6">CSS ទទួលខុសត្រូវក្នុងការកំណត់រចនាប័ទ្ម និងប្លង់ (Layout) នៃគេហទំព័ររបស់អ្នក។</p>
+
+            <!-- Lesson 12: CSS Integration -->
+            <section id="lesson12" class="bg-white p-6 rounded-xl lesson-card lesson-header">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">១២. វិធីសាស្រ្តបញ្ចូល CSS (Inline, Internal, External)</h3>
+                <p class="text-gray-700 mb-4">មាន ៣ វិធីដើម្បីបន្ថែម CSS: **Inline** (នៅលើស្លាក), **Internal** (នៅក្នុងស្លាក `&lt;style&gt;`), **External** (ឯកសារ `.css` ដាច់ដោយឡែក)។</p>
+                <div class="code-block">
+                    &lt;!-- Internal CSS (ក្នុង &lt;head&gt;) --&gt;<br>
+                    &lt;style&gt; .special { color: red; } &lt;/style&gt;<br>
+                    <br>
+                    &lt;!-- Inline CSS --&gt;<br>
+                    &lt;p style="color: blue;"&gt;អត្ថបទពណ៌ខៀវ&lt;/p&gt;
+                </div>
+                <h4 class="font-semibold mt-4">ការមើលជាមុនផ្ទាល់៖</h4>
+                <div class="live-preview">
+                    <p class="text-xl" style="color: #ef4444; font-weight: 700;">អត្ថបទនេះប្រើ Inline CSS (ពណ៌ក្រហម)។</p>
+                </div>
+            </section>
+
+            <!-- Lesson 13: Colors, Fonts, and Typography -->
+            <section id="lesson13" class="bg-white p-6 rounded-xl lesson-card lesson-header">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">១៣. ពណ៌, ពុម្ពអក្សរ, និង Typography</h3>
+                <p class="text-gray-700 mb-4">អ្នកអាចផ្លាស់ប្តូរ **`color`** (អត្ថបទ), **`background-color`** (ផ្ទៃខាងក្រោយ), **`font-family`** (ប្រភេទពុម្ពអក្សរ) និង **`font-size`** ។</p>
+                <div class="code-block">
+                    /* ឧទាហរណ៍ CSS */<br>
+                    .box {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;background-color: #34d399;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;color: white;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;font-family: Arial, sans-serif;<br>
+                    }
+                </div>
+                <h4 class="font-semibold mt-4">ការមើលជាមុនផ្ទាល់៖</h4>
+                <div class="live-preview bg-green-400 text-white p-4 rounded shadow">
+                    <p class="font-serif text-lg">នេះ​គឺ​ជា​អត្ថបទ​ដែល​មាន​ផ្ទៃ​ខាង​ក្រោយ​ពណ៌​បៃតង។</p>
+                </div>
+            </section>
+
+            <!-- Lesson 14: Selectors -->
+            <section id="lesson14" class="bg-white p-6 rounded-xl lesson-card lesson-header">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">១៤. ឧបករណ៍ជ្រើសរើស CSS (Selectors)</h3>
+                <p class="text-gray-700 mb-4">Selectors កំណត់ថា CSS គួរអនុវត្តលើធាតុណា។ **Element Selector** (`p`), **Class Selector** (`.my-class`), **ID Selector** (`#my-id`) ។ Class ត្រូវបានប្រើញឹកញាប់បំផុត។</p>
+                <div class="code-block">
+                    &lt;style&gt; #title { color: orange; } &lt;/style&gt;<br>
+                    &lt;h2 id="title"&gt;ចំណងជើងពិសេស&lt;/h2&gt;
+                </div>
+                <h4 class="font-semibold mt-4">ការមើលជាមុនផ្ទាល់៖</h4>
+                <div class="live-preview">
+                    <h4 id="live_selector_example" class="text-orange-500 font-bold">ចំណងជើងដែលបានកំណត់ដោយ ID Selector ។</h4>
+                </div>
+            </section>
+
+            <!-- Lesson 15: The Box Model -->
+            <section id="lesson15" class="bg-white p-6 rounded-xl lesson-card lesson-header">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">១៥. The Box Model (Margin, Border, Padding, Content)</h3>
+                <p class="text-gray-700 mb-4">រាល់ធាតុ HTML ទាំងអស់គឺជាប្រអប់ (Box) ដែលមាន ៤ ផ្នែក៖ **Content** (មាតិកា), **Padding** (ចន្លោះខាងក្នុង), **Border** (ស៊ុម), និង **Margin** (ចន្លោះខាងក្រៅ) ។</p>
+                <div class="code-block">
+                    .box {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;padding: 15px; /* ចន្លោះខាងក្នុង */<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;border: 2px solid black;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;margin: 20px; /* ចន្លោះខាងក្រៅ */<br>
+                    }
+                </div>
+                <h4 class="font-semibold mt-4">ការមើលជាមុនផ្ទាល់៖</h4>
+                <div class="live-preview">
+                    <div class="p-6 border-4 border-blue-500 bg-blue-100 text-center mx-4 my-4">
+                        <p class="text-sm">មាតិកា</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Lesson 16: Display Property -->
+            <section id="lesson16" class="bg-white p-6 rounded-xl lesson-card lesson-header">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">១៦. Display Property (Block, Inline, Inline-Block)</h3>
+                <p class="text-gray-700 mb-4">**`block`** យកទទឹងពេញមួយបន្ទាត់ (`div`, `p`) ។ **`inline`** យកតែទំហំមាតិកា (`span`, `a`) ។ **`inline-block`** យកទំហំមាតិកា តែអាចកំណត់ទទឹង/កម្ពស់បាន។</p>
+                <div class="code-block">
+                    .item { display: inline-block; width: 100px; }
+                </div>
+                <h4 class="font-semibold mt-4">ការមើលជាមុនផ្ទាល់៖</h4>
+                <div class="live-preview">
+                    <span class="inline-block bg-yellow-300 p-2 m-1">SPAN 1</span>
+                    <span class="inline-block bg-yellow-300 p-2 m-1">SPAN 2</span>
+                    <div class="bg-gray-300 p-2">DIV ពេញបន្ទាត់</div>
+                </div>
+            </section>
+
+            <!-- Lesson 17: Flexbox Basics -->
+            <section id="lesson17" class="bg-white p-6 rounded-xl lesson-card lesson-header">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">១៧. Flexbox៖ មូលដ្ឋានគ្រឹះ</h3>
+                <p class="text-gray-700 mb-4">Flexbox គឺជាឧបករណ៍ដ៏មានឥទ្ធិពលសម្រាប់ការតម្រៀបធាតុក្នុងមួយវិមាត្រ (ជួរដេក ឬជួរឈរ) ។ ចាប់ផ្តើមដោយកំណត់ **`display: flex`** លើធុងឪពុក (Parent) ។</p>
+                <div class="code-block">
+                    .container { display: flex; flex-direction: row; }
+                </div>
+                <h4 class="font-semibold mt-4">ការមើលជាមុនផ្ទាល់៖</h4>
+                <div class="live-preview flex justify-between bg-purple-100 p-4 rounded">
+                    <div class="bg-purple-500 text-white p-2 rounded">Flex 1</div>
+                    <div class="bg-purple-500 text-white p-2 rounded">Flex 2</div>
+                    <div class="bg-purple-500 text-white p-2 rounded">Flex 3</div>
+                </div>
+            </section>
+
+            <!-- Lesson 18: Flexbox Alignment -->
+            <section id="lesson18" class="bg-white p-6 rounded-xl lesson-card lesson-header">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">១៨. Flexbox៖ ការតម្រឹម (Alignment & Justify)</h3>
+                <p class="text-gray-700 mb-4">**`justify-content`** គ្រប់គ្រងចន្លោះតាមអ័ក្សមេ (main axis) ។ **`align-items`** គ្រប់គ្រងការតម្រឹមតាមអ័ក្សឆ្លងកាត់ (cross axis) ។</p>
+                <div class="code-block">
+                    .container {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;justify-content: center; /* ផ្ដេកកណ្តាល */<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;align-items: center; /* បញ្ឈរកណ្តាល */<br>
+                    }
+                </div>
+                <h4 class="font-semibold mt-4">ការមើលជាមុនផ្ទាល់៖</h4>
+                <div class="live-preview flex h-24 items-center justify-around bg-indigo-100 p-4 rounded">
+                    <div class="bg-indigo-500 text-white p-2 rounded">A</div>
+                    <div class="bg-indigo-500 text-white p-2 rounded">B</div>
+                </div>
+            </section>
+
+            <!-- Lesson 19: CSS Grid Intro -->
+            <section id="lesson19" class="bg-white p-6 rounded-xl lesson-card lesson-header">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">១៩. CSS Grid៖ សេចក្តីផ្តើម</h3>
+                <p class="text-gray-700 mb-4">Grid គឺជាឧបករណ៍សម្រាប់ប្លង់ពីរវិមាត្រ (ជួរដេក និងជួរឈរ) ។ កំណត់ **`display: grid`** និងប្រើ **`grid-template-columns`** ដើម្បីកំណត់ជួរឈរ។</p>
+                <div class="code-block">
+                    .grid-cont {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;display: grid;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;grid-template-columns: 1fr 1fr 1fr; /* ៣ ជួរឈរស្មើគ្នា */<br>
+                    }
+                </div>
+                <h4 class="font-semibold mt-4">ការមើលជាមុនផ្ទាល់៖</h4>
+                <div class="live-preview grid grid-cols-3 gap-2 bg-pink-100 p-4 rounded">
+                    <div class="bg-pink-500 text-white p-2 text-center rounded">១</div>
+                    <div class="bg-pink-500 text-white p-2 text-center rounded">២</div>
+                    <div class="bg-pink-500 text-white p-2 text-center rounded">៣</div>
+                </div>
+            </section>
+
+            <!-- Lesson 20: Responsive Design with Media Queries -->
+            <section id="lesson20" class="bg-white p-6 rounded-xl lesson-card lesson-header">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">២០. Responsive Design: Media Queries</h3>
+                <p class="text-gray-700 mb-4">**Media Queries** អនុញ្ញាតឱ្យអ្នកអនុវត្តរចនាប័ទ្មផ្សេងៗដោយផ្អែកលើទំហំអេក្រង់ (Viewport) ។ នេះគឺចាំបាច់សម្រាប់ការមើលនៅលើទូរស័ព្ទ។</p>
+                <div class="code-block">
+                    @media (max-width: 600px) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;/* ស្ទីលនេះប្រើតែលើអេក្រង់តូចជាង ៦០០px ទេ */<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;h1 { font-size: 1.5rem; }<br>
+                    }
+                </div>
+                <h4 class="font-semibold mt-4">ការមើលជាមុនផ្ទាល់៖</h4>
+                <div class="live-preview bg-yellow-100 p-4 rounded">
+                    <p class="font-bold">សាកល្បងបង្រួម (resize) បង្អួច Browser របស់អ្នក។</p>
+                    <p class="md:hidden text-red-600">អ្នកកំពុងមើលនៅលើអេក្រង់តូច!</p>
+                    <p class="hidden md:block text-green-600">អ្នកកំពុងមើលនៅលើអេក្រង់ធំ!</p>
+                </div>
+                <button onclick="document.getElementById('hint20').style.display = 'block'" class="mt-4 px-4 py-2 bg-yellow-500 text-white rounded text-sm hover:bg-yellow-600">បង្ហាញគន្លឹះ (Hint)</p>
+                <div id="hint20" class="challenge-hint mt-2">Tailwind ប្រើ class ដូចជា **`md:hidden`** ដើម្បីអនុវត្ត Media Queries ។</div>
+            </section>
+
+            <!-- Lesson 21: Transitions and Animations -->
+            <section id="lesson21" class="bg-white p-6 rounded-xl lesson-card lesson-header">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">២១. Transitions និង Animations</h3>
+                <p class="text-gray-700 mb-4">**`transition`** បង្កើតចលនាប្តូររលូននៅពេលស្ថានភាពផ្លាស់ប្តូរ (ឧ. លើ `hover`) ។ **`@keyframes`** អនុញ្ញាតឱ្យអ្នកបង្កើតចលនាដ៏ស្មុគស្មាញ។</p>
+                <div class="code-block">
+                    .button {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;transition: background-color 0.3s ease; /* ភាពរលូន ០.៣ វិនាទី */<br>
+                    }<br>
+                    .button:hover { background-color: red; }
+                </div>
+                <h4 class="font-semibold mt-4">ការមើលជាមុនផ្ទាល់៖</h4>
+                <div class="live-preview">
+                    <button class="transition duration-300 transform hover:scale-110 bg-red-500 text-white p-3 rounded-lg shadow-lg">ដាក់ Mouse លើខ្ញុំ</button>
+                </div>
+            </section>
+            
+            <!-- Lesson 22: Pseudo-classes -->
+            <section id="lesson22" class="bg-white p-6 rounded-xl lesson-card lesson-header">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">២២. Pseudo-classes (ឧ. :hover, :nth-child)</h3>
+                <p class="text-gray-700 mb-4">Pseudo-classes ជ្រើសរើសធាតុដោយផ្អែកលើស្ថានភាពរបស់វា។ **`:hover`** សម្រាប់ពេល Mouse ដាក់លើធាតុ។ **`:nth-child(n)`** ជ្រើសរើសធាតុរងតាមលំដាប់លំដោយ។</p>
+                <div class="code-block">
+                    .list li:nth-child(odd) { background-color: #eee; } /* ជ្រើសរើសលេខសេស */<br>
+                    .link:focus { outline: 2px solid blue; } /* ពេលធាតុត្រូវបានជ្រើសរើស (Tabbed) */
+                </div>
+                <h4 class="font-semibold mt-4">ការមើលជាមុនផ្ទាល់៖</h4>
+                <div class="live-preview">
+                    <ul class="space-y-1">
+                        <li class="p-1 bg-gray-200">ធាតុទី ១ (Odd)</li>
+                        <li class="p-1">ធាតុទី ២ (Even)</li>
+                        <li class="p-1 bg-gray-200">ធាតុទី ៣ (Odd)</li>
+                    </ul>
+                    <a href="#" class="inline-block mt-3 p-2 rounded focus:outline-blue-500 focus:outline">តំណភ្ជាប់ (Tab មកនេះ)</a>
+                </div>
+            </section>
+
+            <!-- JavaScript Section Header -->
+            <h2 class="text-3xl font-extrabold text-red-600 border-b-4 border-red-600 pb-2 pt-4">ផ្នែកទី ៣៖ JavaScript (JS)</h2>
+            <p class="text-lg mb-6">JavaScript គឺជាខួរក្បាលនៃគេហទំព័រ។ វាបន្ថែមអន្តរកម្ម និងអនុញ្ញាតឱ្យគេហទំព័រឆ្លើយតបទៅនឹងសកម្មភាពរបស់អ្នកប្រើប្រាស់។</p>
+
+            <!-- Lesson 23: Introduction and Embedding JS -->
+            <section id="lesson23" class="bg-white p-6 rounded-xl lesson-card lesson-header">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">២៣. សេចក្តីផ្តើម និងការបញ្ចូល JavaScript</h3>
+                <p class="text-gray-700 mb-4">JS អាចត្រូវបានបញ្ចូលតាមរយៈស្លាក **&lt;script&gt;** នៅក្នុង HTML ។ តាមទម្លាប់ ដាក់ស្លាកនេះនៅចុងបញ្ចប់នៃ `&lt;body&gt;` ដើម្បីឱ្យ HTML ផ្ទុកមុន។</p>
+                <div class="code-block">
+                    &lt;button onclick="console.log('Hello!')"&gt;Click&lt;/button&gt;<br>
+                    &lt;script&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;console.log('JS ដំណើរការ');<br>
+                    &lt;/script&gt;
+                </div>
+                <h4 class="font-semibold mt-4">ការមើលជាមុនផ្ទាល់៖</h4>
+                <div class="live-preview">
+                    <p>សូមបើក **Console** នៃ Developer Tools របស់អ្នកដើម្បីមើលសារ "JS ដំណើរការ"។</p>
+                </div>
+            </section>
+
+            <!-- Lesson 24: Variables and Data Types -->
+            <section id="lesson24" class="bg-white p-6 rounded-xl lesson-card lesson-header">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">២៤. អថេរ (Variables) និង ប្រភេទទិន្នន័យ</h3>
+                <p class="text-gray-700 mb-4">ប្រើ **`let`** សម្រាប់អថេរដែលអាចផ្លាស់ប្តូរបាន និង **`const`** សម្រាប់តម្លៃដែលមិនផ្លាស់ប្តូរ (Constants) ។ ប្រភេទទិន្នន័យសំខាន់ៗ៖ **String** (អត្ថបទ), **Number** (លេខ), **Boolean** (`true`/`false`) ។</p>
+                <div class="code-block">
+                    const appName = "My App";<br>
+                    let counter = 0;<br>
+                    let isActive = true;
+                </div>
+                <h4 class="font-semibold mt-4">ការមើលជាមុនផ្ទាល់៖</h4>
+                <div class="live-preview">
+                    <p id="var_display">សូមចុចប៊ូតុងខាងក្រោម...</p>
+                    <button onclick="document.getElementById('var_display').textContent = 'ឈ្មោះកម្មវិធី: ' + appName" class="bg-red-500 text-white p-2 rounded text-sm hover:bg-red-600">បង្ហាញអថេរ</button>
+                    <script>const appName = "វគ្គសិក្សាកូដ";</script>
+                </div>
+            </section>
+
+            <!-- Lesson 25: Operators and Conditionals -->
+            <section id="lesson25" class="bg-white p-6 rounded-xl lesson-card lesson-header">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">២៥. ប្រតិបត្តិករ (Operators) និង លក្ខខណ្ឌ (Conditionals)</h3>
+                <p class="text-gray-700 mb-4">ប្រតិបត្តិករគណិតវិទ្យា (`+`, `-`, `*`) និងប្រៀបធៀប (`==`, `>`) ។ **`if / else`** អនុញ្ញាតឱ្យអ្នកប្រតិបត្តិប្លុកកូដដោយផ្អែកលើលក្ខខណ្ឌមួយ។</p>
+                <div class="code-block">
+                    let age = 18;<br>
+                    if (age >= 18) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;console.log("ពេញវ័យ");<br>
+                    } else {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;console.log("អនីតិជន");<br>
+                    }
+                </div>
+                <h4 class="font-semibold mt-4">ការមើលជាមុនផ្ទាល់៖</h4>
+                <div class="live-preview">
+                    <p id="age_check">Status: មិនទាន់ពិនិត្យ</p>
+                    <button onclick="checkAge(16)" class="bg-green-500 text-white p-2 rounded text-sm hover:bg-green-600">ពិនិត្យអាយុ ១៦</button>
+                    <button onclick="checkAge(20)" class="bg-green-500 text-white p-2 rounded text-sm hover:bg-green-600">ពិនិត្យអាយុ ២០</button>
+                    <script>
+                        function checkAge(age) {
+                            if (age >= 18) {
+                                document.getElementById('age_check').textContent = `Status: អាយុ ${age} (ពេញវ័យ)`;
+                            } else {
+                                document.getElementById('age_check').textContent = `Status: អាយុ ${age} (អនីតិជន)`;
+                            }
+                        }
+                    </script>
+                </div>
+            </section>
+
+            <!-- Lesson 26: Functions -->
+            <section id="lesson26" class="bg-white p-6 rounded-xl lesson-card lesson-header">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">២៦. អនុគមន៍ (Functions)</h3>
+                <p class="text-gray-700 mb-4">Functions គឺជាប្លុកកូដដែលអាចប្រើឡើងវិញបាន។ ពួកគេទទួល **Parameters** (ធាតុបញ្ចូល) និង **`return`** តម្លៃ (លទ្ធផល) ។</p>
+                <div class="code-block">
+                    function greet(name) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;return "ជំរាបសួរ, " + name;<br>
+                    }<br>
+                    let message = greet("មករា");
+                </div>
+                <h4 class="font-semibold mt-4">ការមើលជាមុនផ្ទាល់៖</h4>
+                <div class="live-preview">
+                    <p id="greet_message">សូមចុចប៊ូតុង។</p>
+                    <button onclick="document.getElementById('greet_message').textContent = live_greet('សិរី')" class="bg-yellow-500 text-gray-900 p-2 rounded text-sm hover:bg-yellow-600">ស្វាគមន៍ សិរី</button>
+                    <script>
+                        function live_greet(name) {
+                            return `ជំរាបសួរ, ${name}! ស្វាគមន៍។`;
+                        }
+                    </script>
+                </div>
+            </section>
+
+            <!-- Lesson 27: Events -->
+            <section id="lesson27" class="bg-white p-6 rounded-xl lesson-card lesson-header">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">២៧. ព្រឹត្តិការណ៍ (Events)</h3>
+                <p class="text-gray-700 mb-4">Events គឺជារបៀបដែល JS ឆ្លើយតបទៅនឹងសកម្មភាពរបស់អ្នកប្រើប្រាស់។ ឧទាហរណ៍៖ **`click`** (ចុច), **`mouseover`** (ដាក់ Mouse លើ) ។</p>
+                <div class="code-block">
+                    &lt;button id="myBtn"&gt;...&lt;/button&gt;<br>
+                    &lt;script&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;document.getElementById("myBtn").addEventListener('click', myFunction);<br>
+                    &lt;/script&gt;
+                </div>
+                <h4 class="font-semibold mt-4">ការមើលជាមុនផ្ទាល់៖</h4>
+                <div class="live-preview">
+                    <button id="event_btn" class="bg-orange-500 text-white p-2 rounded text-sm hover:bg-orange-600 transition">ចុចខ្ញុំ</button>
+                    <p id="event_status" class="mt-2 text-sm">Status: រង់ចាំការចុច...</p>
+                    <script>
+                        const eventBtn = document.getElementById('event_btn');
+                        const eventStatus = document.getElementById('event_status');
+                        eventBtn.addEventListener('click', () => {
+                            eventStatus.textContent = 'Status: ទទួលបានព្រឹត្តិការណ៍ចុច!';
+                            eventBtn.classList.add('animate-pulse');
+                        });
+                    </script>
+                </div>
+            </section>
+
+            <!-- Lesson 28: DOM Selection -->
+            <section id="lesson28" class="bg-white p-6 rounded-xl lesson-card lesson-header">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">២៨. DOM Manipulation៖ ការជ្រើសរើសធាតុ</h3>
+                <p class="text-gray-700 mb-4">**DOM (Document Object Model)** គឺជាតំណាងធាតុ HTML របស់អ្នក។ អ្នកត្រូវតែជ្រើសរើសវាដើម្បីផ្លាស់ប្តូរវា។ វិធីទូទៅបំផុតគឺ **`document.getElementById()`** ។</p>
+                <div class="code-block">
+                    const element = document.getElementById("myID");<br>
+                    const element2 = document.querySelector(".my-class"); /* ជ្រើសរើសដំបូងគេ */
+                </div>
+                <h4 class="font-semibold mt-4">ការមើលជាមុនផ្ទាល់៖</h4>
+                <div class="live-preview">
+                    <div id="target_element" class="p-3 bg-gray-200 rounded">ខ្ញុំជាគោលដៅ។</div>
+                    <button onclick="document.getElementById('target_element').textContent = 'ខ្ញុំត្រូវបានជ្រើសរើសដោយ JS!'" class="bg-blue-500 text-white p-2 rounded text-sm mt-2 hover:bg-blue-600">ជ្រើសរើស និងប្តូរ</button>
+                </div>
+            </section>
+
+            <!-- Lesson 29: DOM Manipulation -->
+            <section id="lesson29" class="bg-white p-6 rounded-xl lesson-card lesson-header">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">២៩. DOM Manipulation៖ ការផ្លាស់ប្តូរមាតិកា</h3>
+                <p class="text-gray-700 mb-4">អ្នកអាចផ្លាស់ប្តូរអត្ថបទដោយប្រើ **`.textContent`** ឬ HTML ដោយប្រើ **`.innerHTML`** ។ អ្នកក៏អាចផ្លាស់ប្តូររចនាប័ទ្មដោយផ្ទាល់ដោយប្រើ **`.style`** ។</p>
+                <div class="code-block">
+                    element.textContent = "New Text";<br>
+                    element.style.backgroundColor = "yellow";
+                </div>
+                <h4 class="font-semibold mt-4">ការមើលជាមុនផ្ទាល់៖</h4>
+                <div class="live-preview">
+                    <div id="style_box" class="p-4 bg-red-100 rounded border-2 border-red-500 w-32 text-center">ប្រអប់រចនាប័ទ្ម</div>
+                    <button onclick="document.getElementById('style_box').style.backgroundColor = 'rgb(52, 211, 100)'; document.getElementById('style_box').textContent = 'ពណ៌បៃតង!'" class="bg-red-500 text-white p-2 rounded text-sm mt-2 hover:bg-red-600">ប្តូរពណ៌</button>
+                </div>
+            </section>
+
+            <!-- Lesson 30: DOM Creating New Elements -->
+            <section id="lesson30" class="bg-white p-6 rounded-xl lesson-card lesson-header">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">៣០. DOM Manipulation៖ ការបង្កើតធាតុថ្មី</h3>
+                <p class="text-gray-700 mb-4">ដើម្បីបន្ថែមធាតុថ្មីទៅក្នុងទំព័រ៖ ប្រើ **`document.createElement()`** ដើម្បីបង្កើតស្លាក ហើយបន្ទាប់មក **`.appendChild()`** ដើម្បីភ្ជាប់វាទៅនឹងធាតុឪពុក។</p>
+                <div class="code-block">
+                    const newP = document.createElement('p');<br>
+                    newP.textContent = "ធាតុថ្មី";<br>
+                    document.getElementById('parent').appendChild(newP);
+                </div>
+                <h4 class="font-semibold mt-4">ការមើលជាមុនផ្ទាល់៖</h4>
+                <div class="live-preview">
+                    <div id="new_element_parent" class="p-3 border border-dashed rounded mb-2">
+                        <p class="text-sm font-bold">មាតិកាបច្ចុប្បន្ន:</p>
+                    </div>
+                    <button id="add_element_btn" class="bg-green-500 text-white p-2 rounded text-sm hover:bg-green-600">បន្ថែមធាតុ</button>
+                    <script>
+                        let element_count = 1;
+                        document.getElementById('add_element_btn').addEventListener('click', () => {
+                            const parent = document.getElementById('new_element_parent');
+                            const newDiv = document.createElement('div');
+                            newDiv.textContent = `ធាតុដែលបានបង្កើត #${element_count}`;
+                            newDiv.className = 'bg-yellow-200 p-1 mt-1 rounded text-sm';
+                            parent.appendChild(newDiv);
+                            element_count++;
+                        });
+                    </script>
+                </div>
+            </section>
+            
+            <!-- Lesson 31: Local Storage -->
+            <section id="lesson31" class="bg-white p-6 rounded-xl lesson-card lesson-header">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">៣១. Local Storage (ការរក្សាទុកទិន្នន័យក្នុង Browser)</h3>
+                <p class="text-gray-700 mb-4">**`localStorage`** អនុញ្ញាតឱ្យគេហទំព័ររបស់អ្នករក្សាទុកទិន្នន័យក្នុង Browser របស់អ្នកប្រើប្រាស់ ដែលនៅតែមានទោះបីជាបិទទំព័រហើយក៏ដោយ។ វាដំណើរការដោយការរក្សាទុក `key: value` ដែលជា String ។</p>
+                <div class="code-block">
+                    localStorage.setItem('userPref', 'dark');<br>
+                    const pref = localStorage.getItem('userPref');<br>
+                    localStorage.removeItem('userPref');
+                </div>
+                <h4 class="font-semibold mt-4">ការមើលជាមុនផ្ទាល់៖</h4>
+                <div class="live-preview">
+                    <input type="text" id="pref_input" class="border p-2 rounded w-full mb-2" placeholder="បញ្ចូលឈ្មោះហៅក្រៅ...">
+                    <button onclick="savePref()" class="bg-purple-500 text-white p-2 rounded text-sm hover:bg-purple-600">រក្សាទុក</button>
+                    <button onclick="loadPref()" class="bg-gray-500 text-white p-2 rounded text-sm hover:bg-gray-600">បង្ហាញ</button>
+                    <p id="pref_status" class="mt-2 text-sm">Status: រង់ចាំការរក្សាទុក...</p>
+                    <script>
+                        function savePref() {
+                            const name = document.getElementById('pref_input').value;
+                            if (name) {
+                                localStorage.setItem('nickname', name);
+                                document.getElementById('pref_status').textContent = `Status: រក្សាទុក '${name}' រួចរាល់។`;
+                            } else {
+                                document.getElementById('pref_status').textContent = 'សូមបញ្ចូលឈ្មោះ។';
+                            }
+                        }
+                        function loadPref() {
+                            const name = localStorage.getItem('nickname');
+                            document.getElementById('pref_status').textContent = name ? `Status: ឈ្មោះដែលបានរក្សាទុក៖ ${name}` : 'Status: មិនមានទិន្នន័យរក្សាទុកទេ។';
+                        }
+                    </script>
+                </div>
+            </section>
+            
+            <!-- Lesson 32: Simple JS Project (Counter) -->
+            <section id="lesson32" class="bg-white p-6 rounded-xl lesson-card lesson-header">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">៣២. គម្រោងសាមញ្ញ៖ ឧបករណ៍រាប់លេខ (Counter)</h3>
+                <p class="text-gray-700 mb-4">នេះគឺជាឧទាហរណ៍នៃការរួមបញ្ចូល HTML, CSS, និង JS ដើម្បីបង្កើតកម្មវិធីតូចមួយ។ យើងប្រើអថេរដើម្បីរក្សាទុកស្ថានភាព និង DOM manipulation ដើម្បីធ្វើបច្ចុប្បន្នភាព UI ។</p>
+                <div class="code-block">
+                    &lt;p id="count"&gt;0&lt;/p&gt;<br>
+                    &lt;button onclick="increment()"&gt;+&lt;/button&gt;<br>
+                    &lt;script&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;let count = 0;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;function increment() { count++; ... }<br>
+                    &lt;/script&gt;
+                </div>
+                <h4 class="font-semibold mt-4">ការមើលជាមុនផ្ទាល់៖</h4>
+                <div class="live-preview text-center p-6 bg-blue-50 rounded-lg">
+                    <p class="text-4xl font-extrabold mb-4" id="counter_display">0</p>
+                    <div class="space-x-4">
+                        <button id="btn_minus" class="bg-red-500 text-white text-2xl w-12 h-12 rounded-full hover:bg-red-600 transition shadow-md">-</button>
+                        <button id="btn_plus" class="bg-green-500 text-white text-2xl w-12 h-12 rounded-full hover:bg-green-600 transition shadow-md">+</button>
+                    </div>
+                    <script>
+                        let live_count = 0;
+                        const display = document.getElementById('counter_display');
+                        
+                        document.getElementById('btn_plus').addEventListener('click', () => {
+                            live_count++;
+                            display.textContent = live_count;
+                        });
+                        
+                        document.getElementById('btn_minus').addEventListener('click', () => {
+                            live_count--;
+                            display.textContent = live_count;
+                        });
+                    </script>
+                </div>
+                <h5 class="font-bold mt-4">លំហាត់ (Challenge):</h5>
+                <p class="text-gray-700 text-sm">ព្យាយាមបន្ថែមប៊ូតុងមួយទៀតដែលមានស្លាកថា **"Reset"** ដែលកំណត់ចំនួនរាប់ទៅ ០ វិញ។</p>
+            </section>
+
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="text-center py-6 mt-12 bg-red-700 text-white rounded-lg lesson-card">
+            <p class="text-xl font-extrabold">សូមអបអរសាទរ! អ្នកបានបញ្ចប់មេរៀនទាំងអស់ហើយ។</p>
+            <p class="mt-2 text-md">អ្នកមានចំណេះដឹងជាមូលដ្ឋានក្នុងការកសាងគេហទំព័រ។ អនុវត្តជាប្រចាំ!</p>
+            <a href="#course-content" class="mt-3 inline-block text-yellow-300 hover:text-yellow-400 text-sm">ត្រលប់ទៅខាងលើ</a>
+        </footer>
+    </div>
+    
+    <!-- Dark Mode Toggle Script -->
+    <script>
+        const modeToggle = document.getElementById('mode-toggle');
+        const body = document.body;
+
+        // Function to set the theme
+        function setTheme(isDark) {
+            if (isDark) {
+                body.classList.add('dark-mode');
+                modeToggle.textContent = 'ប្តូររបៀប (Light Mode)';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.classList.remove('dark-mode');
+                modeToggle.textContent = 'ប្តូររបៀប (Dark Mode)';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Load saved theme or default to light
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            setTheme(true);
+        } else {
+            setTheme(false); // Initialize with light mode
+        }
+
+        // Toggle functionality
+        modeToggle.addEventListener('click', () => {
+            const isDark = body.classList.contains('dark-mode');
+            setTheme(!isDark);
+        });
+        
+        // Hide all challenge hints initially
+        document.querySelectorAll('.challenge-hint').forEach(hint => {
+            hint.style.display = 'none';
+        });
+    </script>
+
+</body>
+</html>
